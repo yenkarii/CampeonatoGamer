@@ -82,6 +82,45 @@ app.post("/partidas", (req, res) => {
     });
 });
 
+app.put("/partidas/:id", (req, res)=>{
+    const id = Number(req.params.id);
+    const indice = PARTIDAS.findIndex(p => p.id === id);
+
+    if(indice === -1){
+        return res.status(400).json({
+            mensagem: "Partida não encontrada"
+        })
+    };
+
+    const {jogo, timeA, timeB, pontoA, pontoB, status} = req.body;
+
+    if(!jogo || !timeA || !timeB
+        || !Number.isInteger(pontoA)
+        || !Number.isInteger(pontoB)
+        || pontoA < 0 || pontoB < 0
+        || !["agendada", "finalizada"].includes(status)
+    ){
+        return res.status(400).json({
+            mensagem: "Envie o jogo, times, placares válidos e statusss"
+        });
+    }
+
+    PARTIDAS[indice] = {
+        id,
+        jogo,
+        timeA,
+        timeB,
+        pontoA,
+        pontoB,
+        status
+    };
+
+    res.status(200).json({
+        mensagem: "Partida atualizada",
+        partida: PARTIDAS[indice]
+    });
+})
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
