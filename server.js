@@ -118,7 +118,7 @@ app.put("/partidas/:id", (req, res)=>{
     res.status(200).json({
         mensagem: "Partida atualizada",
         partida: PARTIDAS[indice]
-    });
+    })
 })
 
 const PORT = 3000;
